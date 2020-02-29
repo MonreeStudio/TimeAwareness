@@ -1,0 +1,2 @@
+rootProject.name='TimeAwareness'
+include ':app'
