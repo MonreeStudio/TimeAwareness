@@ -7,12 +7,13 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal">
@@ -21,34 +22,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="38dp"
+                android:textSize="70dp"
                 android:layout_margin="10dp"
-                android:text="时"/>
+                android:text="0:"/>
             <TextView
                 android:id="@+id/MinuteTextView"
                 android:layout_margin="10dp"
-                android:textSize="38dp"
+                android:textSize="70dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="分"/>
+                android:text="00:"/>
             <TextView
                 android:id="@+id/SecondTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="38dp"
+                android:textSize="70dp"
                 android:layout_margin="10dp"
-                android:text="秒"/>
+                android:text="00"/>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/startButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="开始"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
