@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int hourLen;
     int minuteLen;
     int secondLen;
+    long firstPressedTime;
     TextView hourTv;
     TextView minuteTv;
     TextView secondTv;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Context context;
     SharedPreferences.Editor editor;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - firstPressedTime < 2000) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            firstPressedTime = System.currentTimeMillis();
+        }
+    }
+
+    @Override
     public void onClick(View v){
         switch (v.getId()){
             case R.id.HourTextView:
@@ -123,7 +135,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final Handler handler = new Handler(){
         @SuppressLint("SetTextI18n")
         public void handleMessage(Message msg){
-
+            if(hourTv.getText().toString().equals("0:")&&minuteTv.getText().toString().equals("00:")&&secondTv.getText().toString().equals("00"))
+                Toast.makeText(MainActivity.this,"时间到！",Toast.LENGTH_SHORT).show();
             switch (msg.what){
                 case 1:
                     boolean isRun = sharedPreferences.getBoolean("run",false);
@@ -150,25 +163,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         } else if (secondLen == 0 && minuteLen > 0) {
                             secondLen = 59;
                             minuteLen--;
+                            if (secondLen < 10)
+                                secondTv.setText("0" + secondLen + "");
+                            else
+                                secondTv.setText(secondLen + "");
+                            if (minuteLen < 10)
+                                minuteTv.setText("0" + minuteLen + ":");
+                            else
+                                minuteTv.setText(minuteLen + ":");
                             Message message = handler.obtainMessage(1);
                             handler.sendMessageDelayed(message, 1000);
                         } else if (minuteLen == 0 && hourLen > 0 && secondLen > 0) {
                             secondLen--;
                             minuteLen = 59;
                             hourLen--;
+                            if (secondLen < 10)
+                                secondTv.setText("0" + secondLen + "");
+                            else
+                                secondTv.setText(secondLen + "");
+                            minuteTv.setText(minuteLen);
+                            hourTv.setText(hourLen+":");
                             Message message = handler.obtainMessage(1);
                             handler.sendMessageDelayed(message, 1000);
                         } else if (minuteLen == 0 && hourLen > 0 && secondLen == 0) {
                             secondLen = 59;
                             minuteLen = 59;
                             hourLen--;
+                            secondTv.setText(secondLen + "");
+                            minuteTv.setText(minuteLen+":");
+                            hourTv.setText(hourLen+":");
                             Message message = handler.obtainMessage(1);
                             handler.sendMessageDelayed(message, 1000);
                         }
 
                     }
-                    if(hourTv.getText().toString().equals("0:")&&minuteTv.getText().toString().equals("00:")&&secondTv.getText().toString().equals("00"))
-                        Toast.makeText(MainActivity.this,"时间到！",Toast.LENGTH_SHORT).show();
+
                     break;
                 default:
                     break;
@@ -176,6 +205,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.handleMessage(msg);
         }
     };
+
+
 
     protected void showAddDialog() {
 
